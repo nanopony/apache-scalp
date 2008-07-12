@@ -35,12 +35,11 @@ struct Params {
 	const RuleFactory& factory;
 	const sregex& apache_log;
 	vector<Match *>& results;
-	
-	
+
 	Params(const string& l, const RuleFactory& f, const sregex& a, vector<Match *>& r)
 	  : line(l), factory(f), apache_log(a), results(r)
 	{}
-	
+
   private:
 	Params& operator=(const Params&) {return *this;}
 };
@@ -54,7 +53,7 @@ void execute(Params& p) {
 	for( ; cur != end; ++cur ) {
 		toks.push_back(*cur);
 	}
-	if (toks.size() == 3 && (res=p.factory.check_one(toks[2]))) {
+	if (toks.size() == 3 && p.factory.pre_selected(toks[2]) && (res=p.factory.check_one(toks[2]))) {
 		p.results.push_back(new Match(res,toks));			
 		res=0;
 	}
@@ -87,8 +86,8 @@ int main(int argc, char *argv[])
 		cout << "cannot open the file" << endl;
 		return 0;
 	}
-	
-	size_t loc=0, nb_lines = 250000;
+
+	size_t loc=0, nb_lines = 0;
 	clock_t start = clock();
 	string temp1, temp2;
 	vector<Match *> results;
@@ -105,17 +104,13 @@ int main(int argc, char *argv[])
 	  	++loc;
 	}
 	
-	
 	clock_t end = (1000 * (clock() - start)) / CLOCKS_PER_SEC;
 	float n = float(end) / 1000.00;
-	cout << nb_lines << endl;
-	cout << n << "seconds" << endl;
-	cout << loc << " lines" << endl;
-	cout << "found ~ " << results.size() << endl;		
-	
+	cout << loc << " lines analyzed in " << n << " seconds" << endl;
+	cout << results.size() << " possible warnings found" << endl;		
+
 	for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
 		delete *iter;
-
 	return 0;
 }
 

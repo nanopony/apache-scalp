@@ -20,6 +20,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
+#include <boost/xpressive/xpressive.hpp>
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -90,9 +91,10 @@ struct Element {
 	given filter XML files
 */
 class RuleFactory {
-	std::vector<std::string>          tags;
+	std::vector<std::string>           tags;
 	std::map<unsigned long, Rule *> factory;
-	bool _fails;
+	bool                             _fails;
+	boost::xpressive::sregex    correct_url;
 
   private:
 	RuleFactory(const RuleFactory& ){}
@@ -114,6 +116,7 @@ class RuleFactory {
 	std::vector<Rule *> check_all (const std::string& ) const;
 	std::vector<Rule *> check_type(const std::string& , const std::string& ) const;
 
+	bool pre_selected(const std::string& ) const;
 };
 
 

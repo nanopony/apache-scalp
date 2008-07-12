@@ -24,6 +24,7 @@
 #include "hash.h"
 #include "rule.h"
 using namespace std;
+using namespace boost::xpressive;
 using namespace pcrecpp;
 
 namespace utils {
@@ -113,9 +114,7 @@ void RuleFactory::load(const string& filename) {
 	xmlDoc *doc = 0;
 	xmlNode *root_element = 0;
 
-
 	doc = xmlReadFile(filename.c_str(), 0, XML_PARSE_NOCDATA|XML_PARSE_NONET);
-
 	if (doc == 0) {
 		cout << "error: could not parse file :" << filename << endl;
 		_fails = true;
@@ -201,7 +200,23 @@ void RuleFactory::load(const string& filename) {
 	}
 #endif
 
+	// instanciante the pre_selection regular expression
+	correct_url = sregex::compile("^(\\s*)/([\\w/\\.]*)([\\.\\w]*)$", regex_constants::optimize);
 }
+
+
+/**
+	The pre-selection tries to look for common URL patterns in order to
+	speed up the decision of rejecting a possible URL for containing 
+	attacks
+*/
+bool RuleFactory::pre_selected(const string& url) const {
+	smatch what;
+	if (regex_match(url, what, correct_url))
+		return false;	
+	return true;
+}
+
 
 Rule * RuleFactory::check_one(const string& url) const {
 	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
