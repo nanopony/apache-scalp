@@ -13,12 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
 #include <ctime>
 #include <boost/xpressive/xpressive.hpp>
+#include <memory>
+
+
+#include "threadpool.h"
 
 #include "loken.h"
 #include "rule.h"
@@ -44,25 +49,57 @@ struct Params {
 	Params& operator=(const Params&) {return *this;}
 };
 
+/*
+class LineProcess : public TThreadPool::TJob
+{
+	const Params& p;
+  public:
+	LineProcess(int np, const Params& params) : TThreadPool::TJob(np), p(params) {}
+	void run(void *arg) {
+		Rule *res = 0;
+		vector<string> toks;
+		sregex_token_iterator cur(p.line.begin(), p.line.end(), p.apache_log, subs);
+		sregex_token_iterator end;
+		for( ; cur != end; ++cur ) {
+			toks.push_back(*cur);
+		}
+		if (toks.size() == 3 && p.factory.pre_selected(toks[2]) && (res=p.factory.check_one(toks[2]))) {
+			p.results.push_back(new Match(res,toks));			
+			res=0;
+		}
+	}
+};
 
-void execute(Params& p) {
-	Rule *res = 0;
-	vector<string> toks;
-	sregex_token_iterator cur(p.line.begin(), p.line.end(), p.apache_log, subs);
-	sregex_token_iterator end;
-	for( ; cur != end; ++cur ) {
-		toks.push_back(*cur);
+*/
+class LineProcess : public Thread
+{
+  public:
+	void execute(const Params& params) {
+		Rule *res = 0;
+		vector<string> toks;
+		sregex_token_iterator cur(p.line.begin(), p.line.end(), p.apache_log, subs);
+		sregex_token_iterator end;
+		for( ; cur != end; ++cur ) {
+			toks.push_back(*cur);
+		}
+		if (toks.size() == 3 && p.factory.pre_selected(toks[2]) && (res=p.factory.check_one(toks[2]))) {
+			p.results.push_back(new Match(res,toks));			
+			res=0;
+		}
+		return 0;
 	}
-	if (toks.size() == 3 && p.factory.pre_selected(toks[2]) && (res=p.factory.check_one(toks[2]))) {
-		p.results.push_back(new Match(res,toks));			
-		res=0;
-	}
-}
+	~LineProcess() {}
+};
+
 
 
 int main(int argc, char *argv[])
 {
+	unsigned short NB_THREAD = 5;
 	RuleFactory factory;
+	// TThreadPool  * thread_pool;
+	ThreadPool* thread_pool;
+
 
 	// the regexp to extract the content of the apache log
 	// using Boost.Xpressive for speed here!
@@ -88,22 +125,34 @@ int main(int argc, char *argv[])
 	}
 
 	size_t loc=0, nb_lines = 0;
-	clock_t start = clock();
-	string temp1, temp2;
+	
+	string temp;
 	vector<Match *> results;
+	
+	
+	clock_t start = clock();
+	//--
+	
+	thread_pool = new ThreadPool(NB_THREAD);
 
-	while(true)
+	while(true) 
 	{
-		if (getline(inf, temp1).eof())
+		if (getline(inf, temp).eof())
 			break;
-		Params p1(temp1,factory,apache_log,results);
-		execute(p1);
+		
+		// ugly!!! need to change the design once TP is finished
+		thread_pool->assign(new LineProcess(Params(temp,factory,apache_log,results)));
 		
 		if (nb_lines > 0 && loc > nb_lines)
 			break;
-	  	++loc;
+		++loc;
 	}
-	
+	while(!thread_pool->empty())
+		;
+
+	delete thread_pool;
+	//--
+		
 	clock_t end = (1000 * (clock() - start)) / CLOCKS_PER_SEC;
 	float n = float(end) / 1000.00;
 	cout << loc << " lines analyzed in " << n << " seconds" << endl;
