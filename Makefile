@@ -2,8 +2,8 @@ SRCS=main.cpp rule.cpp hash.cpp loken.cpp
 OBJS=$(patsubst %.cpp, %.o, $(SRCS))
 EXEC=scalp
 CC=g++
-CFLAGS=-Wall -pedantic -O3 -fstrict-aliasing -fomit-frame-pointer -finline-functions -funroll-loops -std=c++98 -march=i586 -mtune=i586 -D_REENTRANT -D_THREAD_SAFE
-OFLAGS=-lxml2 -lpcrecpp -pthread
+CFLAGS=-Wall -pedantic -O3 -fstrict-aliasing -fomit-frame-pointer -finline-functions -funroll-loops -std=c++98 -march=i586 -mtune=i586 -D_REENTRANT
+OFLAGS=-lxml2 -lpcrecpp -lboost_thread
 LFLAGS=-L/usr/local/lib/
 INC=-I/usr/include/libxml2 -I/usr/local/include
 
