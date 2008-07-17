@@ -13,14 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+#include <sstream>
 #include <fstream>
 #include <iostream>
 #include <utility>
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <stdexcept>
 #include <cassert>
 #include <pcrecpp.h>
+#include "config.h"
 #include "hash.h"
 #include "rule.h"
 using namespace std;
@@ -161,7 +164,12 @@ void RuleFactory::load(const string& filename) {
 				temp.impact = impact;
 				temp.tags = tok_tags;
 
-				temp.compiled = new RE(rule, RE_Options().set_utf8(false));			
+				
+				temp.compiled = new RE(rule, RE_Options().set_utf8(true));			
+				
+				
+				
+				
 //#define TAG_HASH
 //#define IMPACT_HASH
 //#define DUMB_HASH
@@ -190,7 +198,13 @@ void RuleFactory::load(const string& filename) {
 		else if (iter->first == "impact")
 			from_string<unsigned int>(impact, iter->second);
 	}
-		
+	
+	
+	// for speed, let's use a list instead of a map for sorting Rule *
+	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
+		lRules.push_back(iter->second);
+	}
+	
 #if 0
 	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
 		cout << iter->first << " -> " << iter->second->impact << "  ";
@@ -201,7 +215,7 @@ void RuleFactory::load(const string& filename) {
 #endif
 
 	// instanciante the pre_selection regular expression
-	correct_url = sregex::compile("^(\\s*)/([\\w/\\.]*)([\\.\\w]*)$", regex_constants::optimize);
+	correct_url = sregex::compile("(\\s*)/([\\w/\\.]*)([\\.\\w]*)", regex_constants::optimize);
 }
 
 
@@ -219,19 +233,17 @@ bool RuleFactory::pre_selected(const string& url) const {
 
 
 Rule * RuleFactory::check_one(const string& url) const {
-	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
-		if (iter->second->compiled->PartialMatch(url.c_str())) {
-			return iter->second;
-		}		
-	}
+	for (list<Rule *>::const_iterator iter=lRules.begin(); iter!=lRules.end(); ++iter)
+		if ((*iter)->compiled->PartialMatch(url.c_str()))
+			return *iter;
 	return (Rule *)0;
 }
 
 vector<Rule *> RuleFactory::check_all(const string& url) const {
 	vector<Rule *> rules;
-	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
-		if (iter->second->compiled->PartialMatch(url.c_str())) {
-			rules.push_back(iter->second);
+	for (list<Rule *>::const_iterator iter=lRules.begin(); iter!=lRules.end(); ++iter) {
+		if ((*iter)->compiled->PartialMatch(url.c_str())) {
+			rules.push_back(*iter);
 		}		
 	}
 	return rules;
@@ -239,9 +251,9 @@ vector<Rule *> RuleFactory::check_all(const string& url) const {
 
 vector<Rule *> RuleFactory::check_type(const string& url, const string& type) const {
 	vector<Rule *> rules;
-	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
-		if (iter->second->has_type(type) && (iter->second->compiled->PartialMatch(url.c_str()))) {
-			rules.push_back(iter->second);
+	for (list<Rule *>::const_iterator iter=lRules.begin(); iter!=lRules.end(); ++iter) {
+		if ((*iter)->has_type(type) && ((*iter)->compiled->PartialMatch(url.c_str()))) {
+			rules.push_back(*iter);
 		}	
 	}
 	return rules;
