@@ -22,11 +22,11 @@
 #include <vector>
 #include <list>
 #include <boost/xpressive/xpressive.hpp>
-
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <pcrecpp.h>
 #include "loken.h"
+#include "converter.h"
 
 
 /**
@@ -37,7 +37,6 @@ struct Rule {
 	std::string  description;
 	std::string       regexp;
 	pcrecpp::RE *   compiled;
-	
 	std::vector<std::string> tags;
 
   public:
@@ -70,7 +69,7 @@ struct Rule {
 std::ostream& operator<<(std::ostream&, const Rule& );
 
 /**
-	Simple container with copelien form
+	Simple pair of string safe container with copelien form
 */
 struct Element {
 	std::string first;
@@ -87,24 +86,27 @@ struct Element {
 	}
 };
 
+
 /**
 	Contains all the rules and load/compile them from the 
 	given filter XML files
 */
 class RuleFactory {
 	std::vector<std::string>            tags;
-	std::map<unsigned long, Rule *> factory;
-	std::list<Rule *>                lRules;
-	bool                             _fails;
-	boost::xpressive::sregex    correct_url;
+	std::map<unsigned long, Rule *>  factory;
+	std::list<Rule *>                 lRules;
+	bool                              _fails;
+	boost::xpressive::sregex     correct_url;	
+	Converter                           conv;
 
   private:
-	RuleFactory(const RuleFactory& ){}
+	RuleFactory(const RuleFactory& ) {}
 	RuleFactory& operator=(const RuleFactory& ){return *this;}
 
 	void walk(xmlNode *a_node, std::vector<Element>& buffer);
 	int getTagIndex(const std::vector<std::string>&) const;
 
+	void populate_converter();
 
   public:
   	~RuleFactory();

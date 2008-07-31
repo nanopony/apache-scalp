@@ -13,37 +13,27 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-#ifndef __MATCH_H
-#define __MATCH_H
-
 #include <string>
 #include <vector>
+#include <iostream>
+#include <sstream>
+#include "converter.h"
+using namespace std;
 
-
-class Rule;
-
-struct Match {
-	Rule * rule;
-	std::vector<std::string> tokens; // date, method, url
-
-	Match() {}
-	Match(Rule * const _rule, const std::vector<std::string>& _tokens)
-	  : rule(_rule), tokens(_tokens)
-	{}
-	Match(const Match& m)
-	  : rule(m.rule), tokens(m.tokens)
-	{}
-	
-	~Match() {}
-	
-	inline Match& operator= (const Match& m) {
-		rule = m.rule;
-		tokens = m.tokens;
-		return *this;	
+void Converter::add(const std::string& _search, const std::string& replace, bool i) {
+	string s = _search;
+	if (m.find(s) == m.end()) {
+		m[s] = replace;
+		if (i) {
+			std::transform(s.begin(), s.end(), s.begin(), (int(*)(int))toupper);
+			m[s] = replace;
+		}
 	}
-};
+}
 
+void Converter::print() {
+	for (map<string,string>::const_iterator iter=m.begin(); iter!=m.end(); ++iter)
+		cout << iter->first << " -> " << iter->second << endl;
+}
 
-
-#endif
 

@@ -28,21 +28,23 @@
   #include <boost/smart_ptr.hpp>
   #include <boost/thread/mutex.hpp>
   #include "threadpool.hpp"
-  
+
   using namespace boost::threadpool; 
 #endif
 
 #include <boost/program_options.hpp> 
 #include "loken.h"
+#include "converter.h"
 #include "rule.h"
 #include "match.h"
+#include "output.h"
 
 using namespace std;
 using namespace boost::xpressive;
 
 
 //const char *apache_re = "(\\d+\\.\\d+\\.\\d+\\.\\d+) - (.*)\\[(.+)-(\\d+)\\] \"([A-Z]+)?(.*) HTTP/\\d.\\d\" (\\d{3}) (\\d+)(\\s\".+\"\\s)?(\".+\")?";
-const char *apache_re = "(\\d+\\.\\d+\\.\\d+\\.\\d+) - ([\\w\\-\\s]*)\\[([^\\s]+) -(\\d+)\\] \"(GET|POST|HEAD|TRACE)?(.+) HTTP/\\d.\\d\" (\\d{3}) (\\d+)(\\s\".+\"\\s)?(\".+\")?";
+const char *apache_re = "(\\d+\\.\\d+\\.\\d+\\.\\d+) - ([\\w\\-\\s]*)\\[([^\\s]+) [-|+](\\d+)\\] \"(GET|POST|HEAD|TRACE)?(.+) HTTP/\\d.\\d\" (\\d+) (\\d+)(\\s\".+\"\\s)?(\".+\")?";
 int const subs[] = {3, 5, 6};
 
 
@@ -78,7 +80,6 @@ class LineProcess {
 int main(int argc, char *argv[])
 {
 	RuleFactory factory;
-
 	// the regexp to extract the content of the apache log
 	// using Boost.Xpressive for speed here!
 	static sregex apache_log = sregex::compile(apache_re, regex_constants::optimize);
@@ -99,7 +100,7 @@ int main(int argc, char *argv[])
 		return 0;	
 	}	
 
-	size_t loc=0, nb_lines=50000;
+	size_t loc=0, nb_lines=5000;
 	clock_t start=0, end=0;
 	string line;
 	vector<Match *> results;
@@ -145,6 +146,11 @@ int main(int argc, char *argv[])
 	cout << loc << " lines analyzed in " << n << " seconds" << endl;
 	cout << results.size() << " possible warnings found" << endl;
 
+	XMLOutput xmlOutput(access_file + "-out.xml", access_file);
+	for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
+		xmlOutput << **iter;
+	
+	// clear the structure..
 	for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
 		delete *iter;
 

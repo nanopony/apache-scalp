@@ -1,4 +1,4 @@
-SRCS=main.cpp rule.cpp hash.cpp loken.cpp
+SRCS=hash.cpp stree/stree.cpp loken.cpp converter.cpp rule.cpp output.cpp main.cpp
 OBJS=$(patsubst %.cpp, %.o, $(SRCS))
 EXEC=scalp
 CC=g++-4.2
@@ -8,7 +8,7 @@ LFLAGS=-L/usr/local/lib/
 INC=-I/usr/include/libxml2 -I/usr/local/include
 
 %.o : %.cpp
-	$(CC) -c $(CFLAGS) $(INC) -pg $< -o $@
+	$(CC) -c $(CFLAGS) $(INC) $< -o $@
 
 $(EXEC) : $(OBJS)
 	$(CC) -o $(EXEC) $(OFLAGS) $(OBJS) $(LFLAGS)

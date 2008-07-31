@@ -26,6 +26,7 @@
 #include "config.h"
 #include "hash.h"
 #include "rule.h"
+#include "converter.h"
 using namespace std;
 using namespace boost::xpressive;
 using namespace pcrecpp;
@@ -37,6 +38,14 @@ namespace utils {
 		                        i  = where.find(what, i + by.size()))
 			where.replace(i, what.size(), by);
 	}
+	
+	template<class T>
+	std::string tos(const T& t, std::ios_base& (*f)(std::ios_base&) = std::dec,  std::ios_base& (*c)(std::ios_base&) = std::nouppercase) {	
+		std::stringstream ss;
+		ss << c << f << t;
+		return ss.str();
+	}
+	
 }
 
 unsigned int Rule::hash() const {
@@ -52,7 +61,7 @@ bool Rule::has_type(const std::string& type) const {
 
 
 ostream& operator<<(ostream& out, const Rule& rule) {
-	out << rule.impact << ',' << rule.regexp << '|' << rule.description;
+	out << rule.impact << ':' << rule.regexp << '|' << rule.description;
 	return out;
 }
 
@@ -164,15 +173,7 @@ void RuleFactory::load(const string& filename) {
 				temp.impact = impact;
 				temp.tags = tok_tags;
 
-				
 				temp.compiled = new RE(rule, RE_Options().set_utf8(true));			
-				
-				
-				
-				
-//#define TAG_HASH
-//#define IMPACT_HASH
-//#define DUMB_HASH
 
 #ifdef TAG_HASH
 				unsigned long  k = (1 << (32 - nb_tags + getTagIndex(tok_tags))) 
@@ -199,7 +200,6 @@ void RuleFactory::load(const string& filename) {
 			from_string<unsigned int>(impact, iter->second);
 	}
 	
-	
 	// for speed, let's use a list instead of a map for sorting Rule *
 	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
 		lRules.push_back(iter->second);
@@ -216,6 +216,10 @@ void RuleFactory::load(const string& filename) {
 
 	// instanciante the pre_selection regular expression
 	correct_url = sregex::compile("(\\s*)/([\\w/\\.]*)([\\.\\w]*)", regex_constants::optimize);
+
+	// populate the converter
+	populate_converter();
+	
 }
 
 
@@ -225,14 +229,24 @@ void RuleFactory::load(const string& filename) {
 	attacks
 */
 bool RuleFactory::pre_selected(const string& url) const {
+	bool anum=true;
+	for (string::const_iterator iter=url.begin();iter!=url.end();++iter)
+		if (!isalpha(*iter) && !isdigit(*iter) && *iter != '.') {
+			anum = false;
+			break;
+		}
+	if (anum) 
+		return false;
 	smatch what;
 	if (regex_match(url, what, correct_url))
 		return false;	
+		
 	return true;
 }
 
 
-Rule * RuleFactory::check_one(const string& url) const {
+Rule * RuleFactory::check_one(const string& _url) const {
+	string url = conv.transform(_url);
 	for (list<Rule *>::const_iterator iter=lRules.begin(); iter!=lRules.end(); ++iter)
 		if ((*iter)->compiled->PartialMatch(url.c_str()))
 			return *iter;
@@ -269,4 +283,86 @@ RuleFactory::~RuleFactory() {
 		}	
 	}
 }
+
+
+// this is just a fast/replacemenet oriented convertion of strings
+// this doesn not implement all the php-ids ones, but it doesn't seem
+// that important for what I want to do with the tool...
+void RuleFactory::populate_converter() {
+
+	// break lines repalcements
+	conv.add("\r",";");
+	conv.add("\n",";");
+	conv.add("\f",";");
+	conv.add("\t",";");
+	conv.add("\v",";");
+	
+	// normalize quotes
+	conv.add("'","\"");
+	conv.add("`","\"");	
+	conv.add("´","\"");	
+	conv.add("’","\"");
+	conv.add("‘","\"");	
+	
+	// utf-7 replacement
+	conv.add("+ACI-"      , "\"");
+	conv.add("+ADw-"      , "<");
+	conv.add("+AD4-"      , ">");
+	conv.add("+AFs-"      , "[");
+	conv.add("+AF0-"      , "]");
+	conv.add("+AHs-"      , "{");
+	conv.add("+AH0-"      , "}");
+	conv.add("+AFw-"      , "\\");
+	conv.add("+ADs-"      , ";");
+	conv.add("+ACM-"      , "#");
+	conv.add("+ACY-"      , "&");
+	conv.add("+ACU-"      , "%");
+	conv.add("+ACQ-"      , "$");
+	conv.add("+AD0-"      , "=");
+	conv.add("+AGA-"      , "`");
+	conv.add("+ALQ-"      , "\"");
+	conv.add("+IBg-"      , "\"");
+	conv.add("+IBk-"      , "\"");
+	conv.add("+AHw-"      , "|");
+	conv.add("+ACo-"      , "*");
+	conv.add("+AF4-"      , "^");
+	conv.add("+ACIAPg-"   , "\">");
+	conv.add("+ACIAPgA8-" , "\">");
+	
+	// Javascript Charcode Tranformer and HTML entities...
+	for (unsigned short i=33; i<127; i++) {
+		string num; num += static_cast<unsigned char>(i);		
+		conv.add("\\"  + utils::tos<unsigned int>(i, std::oct), num);
+		conv.add("\\x" + utils::tos<unsigned int>(i, std::hex), num);
+		conv.add("\\x000000" + utils::tos<unsigned int>(i, std::hex), num);
+		conv.add("\\x" + utils::tos<unsigned int>(i, std::hex, std::uppercase), num);
+		conv.add("\\x000000" + utils::tos<unsigned int>(i, std::hex, std::uppercase), num);
+
+		conv.add("0x" + utils::tos<unsigned int>(i, std::hex), num);
+		conv.add("0x000000" + utils::tos<unsigned int>(i, std::hex), num);
+		conv.add("0x" + utils::tos<unsigned int>(i, std::hex, std::uppercase), num);
+		conv.add("0x000000" + utils::tos<unsigned int>(i, std::hex, std::uppercase), num);	
+
+		conv.add("&#" + utils::tos<unsigned int>(i, std::dec) + ";", num);
+		conv.add("&#" + utils::tos<unsigned int>(i, std::hex) + ";", num);
+	}
+
+	// SQL keywords
+	conv.add("is null", "=0", true); conv.add("like null", "=0", true);
+	conv.add("utc_time", "", true); conv.add("null", "", true); conv.add("true", "", true); conv.add("false", "", true);
+	conv.add("localtime", "", true); conv.add("stamp", "", true); conv.add("binary", "", true); conv.add("ascii", "", true);
+	conv.add("soundex", "", true); conv.add("md5", "", true);
+	conv.add("between", "=", true); conv.add("is", "=", true); conv.add("not in", "=", true); conv.add("xor", "=", true);
+	conv.add("rlike", "=", true); conv.add("regexp", "=", true);  conv.add("sounds like", "=", true);
+	
+	// URL encode control char
+	for (unsigned short i=0;i<20;i++)
+		conv.add("%" +utils::tos<unsigned int>(i, std::hex), "%00", true);	
+
+	conv.init();
+}
+
+
+
+
 

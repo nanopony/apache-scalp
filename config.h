@@ -13,37 +13,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-#ifndef __MATCH_H
-#define __MATCH_H
+#ifndef __CONFIG_H
+#define __CONFIG_H
 
-#include <string>
-#include <vector>
-
-
-class Rule;
-
-struct Match {
-	Rule * rule;
-	std::vector<std::string> tokens; // date, method, url
-
-	Match() {}
-	Match(Rule * const _rule, const std::vector<std::string>& _tokens)
-	  : rule(_rule), tokens(_tokens)
-	{}
-	Match(const Match& m)
-	  : rule(m.rule), tokens(m.tokens)
-	{}
-	
-	~Match() {}
-	
-	inline Match& operator= (const Match& m) {
-		rule = m.rule;
-		tokens = m.tokens;
-		return *this;	
-	}
-};
-
-
+#define MULTI_THREADS
+#define NB_THREAD           5
+#define COMPRESS_REGEXP
 
 #endif
 
