@@ -5,7 +5,7 @@
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+        http,//www.apache.org/licenses/LICENSE-2.0
                 
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
@@ -45,7 +45,6 @@ namespace utils {
 		ss << c << f << t;
 		return ss.str();
 	}
-	
 }
 
 unsigned int Rule::hash() const {
@@ -61,7 +60,7 @@ bool Rule::has_type(const std::string& type) const {
 
 
 ostream& operator<<(ostream& out, const Rule& rule) {
-	out << rule.impact << ':' << rule.regexp << '|' << rule.description;
+	out << rule.impact << "," << rule.regexp << "|" << rule.description;
 	return out;
 }
 
@@ -128,7 +127,7 @@ void RuleFactory::load(const string& filename) {
 
 	doc = xmlReadFile(filename.c_str(), 0, XML_PARSE_NOCDATA|XML_PARSE_NONET);
 	if (doc == 0) {
-		cout << "error: could not parse file :" << filename << endl;
+		cout << "error, could not parse file ," << filename << endl;
 		_fails = true;
 		return;
 	}
@@ -194,13 +193,24 @@ void RuleFactory::load(const string& filename) {
 			description = iter->second;
 		else if (iter->first == "rule")
 			rule = iter->second, ++nb_rules;
-		else if (iter->first == "tag")
-			tok_tags.push_back(iter->second);		
+		else if (iter->first == "tag") {
+#define PUSH(a, b) if (iter->second == a) {tok_tags.push_back(b);}
+			PUSH("xss"  , "Cross-Site Scripting")
+			PUSH("sqli" , "SQL Injection")
+			PUSH("csrf" , "Cross-Site Request Forgery")
+			PUSH("dos"  , "Denial Of Service")
+			PUSH("dt"   , "Directory Traversal")
+			PUSH("spam" , "Spam")
+			PUSH("id"   , "Information Disclosure")
+			PUSH("rfe"  , "Remote File Execution")
+			PUSH("lfi"  , "Local File Inclusion")
+#undef PUSH
+		}
 		else if (iter->first == "impact")
 			from_string<unsigned int>(impact, iter->second);
 	}
 	
-	// for speed, let's use a list instead of a map for sorting Rule *
+	// for speed, let"s use a list instead of a map for sorting Rule *
 	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
 		lRules.push_back(iter->second);
 	}
@@ -209,7 +219,7 @@ void RuleFactory::load(const string& filename) {
 	for (map<unsigned long, Rule *>::const_iterator iter=factory.begin();iter!=factory.end();++iter) {
 		cout << iter->first << " -> " << iter->second->impact << "  ";
 		for(vector<string>::const_iterator jter=iter->second->tags.begin(); jter!= iter->second->tags.end(); ++jter)
-			cout << *jter << ',';
+			cout << *jter << ",";
 		cout << endl;
 	}
 #endif
@@ -240,7 +250,6 @@ bool RuleFactory::pre_selected(const string& url) const {
 	smatch what;
 	if (regex_match(url, what, correct_url))
 		return false;	
-		
 	return true;
 }
 
@@ -286,7 +295,7 @@ RuleFactory::~RuleFactory() {
 
 
 // this is just a fast/replacemenet oriented convertion of strings
-// this doesn not implement all the php-ids ones, but it doesn't seem
+// this doesn not implement all the php-ids ones, but it doesn"t seem
 // that important for what I want to do with the tool...
 void RuleFactory::populate_converter() {
 

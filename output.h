@@ -88,4 +88,38 @@ class XMLOutput {
 
 XMLOutput& operator<< (XMLOutput&, const Match&);
 
+
+class HTMLOutput {
+  protected:
+	bool           fails;
+	std::ofstream stream;
+	std::string      log;
+	
+  protected:
+	HTMLOutput() {}
+	HTMLOutput(const HTMLOutput&) {}
+	HTMLOutput& operator=(const HTMLOutput&) {return *this;}	
+	
+	void header();
+	void footer();
+	
+  public:
+	HTMLOutput(const std::string& fname, const std::string& logfile) : fails(true), stream(fname.c_str()), log(logfile) {
+		if (stream.is_open()) {
+			fails = false;
+			header();
+		}
+	}
+	
+	virtual ~HTMLOutput() {
+		footer();
+		stream.close();
+	}
+	
+	friend HTMLOutput& operator<<(HTMLOutput& , const Match& );
+};
+
+HTMLOutput& operator<< (HTMLOutput&, const Match&);
+
+
 #endif

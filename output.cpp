@@ -22,13 +22,28 @@ using namespace std;
 
 
 
-
-
 static const string xml_header = "<!-- \n\
   File created by Scalp! by Romain Gaucher - http://code.google.com/p/apache-scalp\n\
   Apache log attack analysis tool based on PHP-IDS filters\n\
 -->\n\
 <?xml version=\"1.0\" encoding=\"utf-8\"?>";
+
+
+static const string html_header = "<html><head><style>\
+html, body {background-color:#ccc;color:#222;font-family:'Lucida Grande',Verdana,Arial,Sans-Serif;font-size:0.8em;line-height:1.6em;margin:0;padding:0;}\n\
+body {background-color:#fff;padding:0; margin: 15px; border: 1px solid #444;}\n\
+h1 {	display: block;	border-bottom: 2px solid #333;	padding: 5px;}\n\
+h2 { display: block; font-size: 1.1em; font-weight: normal;}\n\
+.match { display: block; margin: 10px; border: 1px solid; padding: 5px;}\n\
+.impact { float: right; background-color: #fff; border: 1px solid #ccc; padding: 5px; font-size: 1.8em;}\n\
+.impact-1,.impact-2,          { background-color: #f2ffe0; border-color: #DEF0C3;}\n\
+.impact-3,.impact-4,.impact-5 { background-color: #ffe6bf; border-color: #ffd38f;}\n\
+.impact-6,.impact-7,.impact-8 { background-color: #FFEDEF; border-color: #FFC2CA;}\n\
+.highlight {margin: 5px;}\n\
+.reason {font-weight: 700; color: #444;}\n\
+.line, .regexp {border-bottom: 1px solid #ccc; border-right: 1px solid #ccc; background-color: #fff; padding: 2px; margin: 10px;}\n\
+#footer {text-align: center;}\n\
+</style></head><body>";
 
 
 static const string txt_header = "#\n\
@@ -50,6 +65,21 @@ string xml_entities(const string& name) {
 	return out;
 }
 
+string html_entities(const string& name) {
+	string out = "";
+	for (string::const_iterator iter=name.begin(); iter!=name.end(); ++iter) {
+		switch (*iter) {
+			case '\"': out += "&quot;"; break;
+			case '>' : out += "&gt;";   break;
+			case '<' : out += "&lt;";   break;
+			default:
+				out += *iter;
+				break;
+		}		
+	}
+	return out;
+}
+
 string enumerate_types(const vector<string>& v) {
 	string out;
 	if (v.size() < 1)
@@ -60,6 +90,7 @@ string enumerate_types(const vector<string>& v) {
 	}
 	return out;
 }
+
 
 string clean_str(const string& in) {
 	string out = ""; 
@@ -124,6 +155,35 @@ XMLOutput& operator<< (XMLOutput& out, const Match& match) {
 		out.stream << "    <regexp><![CDATA[" << match.rule->regexp << "]]></regexp>" << endl;
 		out.stream << "  </item>" << endl;
 		out.stream << " </attack>" << endl;
+	}
+	return out;
+}
+
+void HTMLOutput::header() {
+	stream << html_header << endl;
+	time_t t;
+	struct tm * timeinfo;
+	time (&t);
+	timeinfo = localtime ( &t );
+	stream << "<h1>Scalp of " << log << " on " << clean_str(asctime(timeinfo)) << "</h1>" << endl;	
+}
+
+
+void HTMLOutput::footer() {
+	stream << "<div id='footer'>Scalp by Romain Gaucher &lt;r@rgaucher.info&gt; - <a href='http://rgaucher.info'>http://rgaucher.info</a></footer></body></html>";
+}
+
+HTMLOutput& operator<< (HTMLOutput& out, const Match& match) {
+	if (!out.fails) {
+		out.stream << "<div class='match impact-" << match.rule->impact << "'>" << endl;
+		out.stream << "<div class='impact'>Impact " << match.rule->impact << "</div>" << endl;
+		out.stream << "<h2>Attack detected: "  << html_entities(enumerate_types(match.rule->tags)) << "</h2>" << endl;
+		out.stream << "  Reason: <span class='reason'>" << html_entities(match.rule->description) << "</span><br />" << endl;
+		out.stream << "<div class='highlight'>" << endl;
+		out.stream << "  <span class='line'><b>Log line:</b>&nbsp;" << html_entities(match.tokens[2]) << "</span><br />" << endl;
+		out.stream << "  <span class='regexp'><b>Matching Regexp:</b>&nbsp;" << html_entities(match.rule->regexp) << "</span>" << endl;
+		out.stream << "</div>" << endl;
+		out.stream << "</div>" << endl;
 	}
 	return out;
 }

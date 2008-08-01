@@ -32,7 +32,6 @@
   using namespace boost::threadpool; 
 #endif
 
-#include <boost/program_options.hpp> 
 #include "loken.h"
 #include "converter.h"
 #include "rule.h"
@@ -77,22 +76,57 @@ class LineProcess {
 #endif
 
 
+void help() {
+	cout << "Scalp the apache log! - http://rgaucher.info/beta/scalp" << endl;
+	cout << "usage:  ./scalp.py [--log|-l log_file] [--filters|-f filter_file] [--period time-frame] [OPTIONS] [--attack a1,a2,..,an]" << endl;
+	cout << "   --log       |-l:  the apache log file './access_log' by default" << endl;
+	cout << "   --filters   |-f:  the filter file     './default_filter.xml' by default" << endl;
+	//cout << "   --exhaustive|-e:  will report all type of attacks detected and not stop" << endl;
+	//cout << "                     at the first found" << endl;
+	cout << "   --period    |-p:  the period must be specified in the same format as in" << endl;
+	cout << "                     the Apache logs using * as wild-card"  << endl;
+	cout << "                     ex: 04/Apr/2008:15:45;*/Mai/2008" << endl;
+	cout << "                     if not specified at the end, the max or min are taken" << endl;
+	cout << "   --html      |-h:  generate an HTML output" << endl;
+	cout << "   --xml       |-x:  generate an XML output" << endl;
+	cout << "   --text      |-t:  generate a simple text output (default)" << endl;
+	//cout << "   --except    |-c:  generate a file that contains the non examined logs due to the" << endl;
+	//cout << "                     main regular expression; ill-formed Apache log etc." << endl;
+	//cout << "   --attack    |-a:  specify the list of attacks to look for" << endl;
+	//cout << "                     list: xss, sqli, csrf, dos, dt, spam, id, ref, lfi" << endl;
+	//cout << "                     the list of attacks should not contains spaces and comma separated" << endl;
+	//cout << "                     ex: xss,sqli,lfi,ref" << endl;
+	cout << "   --order     |-o:  set an order to the output: impact,regxp" << endl;
+}
+
+
 int main(int argc, char *argv[])
 {
 	RuleFactory factory;
 	// the regexp to extract the content of the apache log
 	// using Boost.Xpressive for speed here!
 	static sregex apache_log = sregex::compile(apache_re, regex_constants::optimize);
+	//
 	string filter_xml  = "default_filter.xml";
 	string access_file = "access_log";
-	
-	// only interested in date, method and URL
-	if (argc > 1) {
-		filter_xml = argv[1];
-		if (argc > 2) {
-			access_file = argv[2];
-		}
+	string output      = "html";
+
+	for(int i=1; i<argc; i++) {
+		string s = argv[i];
+		if ((s == "--log" || s == "-l") && i < argc-1)
+			access_file = argv[i+1];
+		if ((s == "--filters" || s == "-f") && i < argc-1)
+			filter_xml = argv[i+1];
+
+		
+		
+		
+		if (s == "--html") output = "html";
+		if (s == "--text") output = "text";
+		if (s == "--xml")  output = "xml";
 	}
+	cout << output << endl;
+	
 	
 	factory.load(filter_xml);
 	if (factory.fails()) {
@@ -100,7 +134,7 @@ int main(int argc, char *argv[])
 		return 0;	
 	}	
 
-	size_t loc=0, nb_lines=5000;
+	size_t loc=0, nb_lines=100000;
 	clock_t start=0, end=0;
 	string line;
 	vector<Match *> results;
@@ -146,9 +180,17 @@ int main(int argc, char *argv[])
 	cout << loc << " lines analyzed in " << n << " seconds" << endl;
 	cout << results.size() << " possible warnings found" << endl;
 
-	XMLOutput xmlOutput(access_file + "-out.xml", access_file);
-	for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
-		xmlOutput << **iter;
+	if (output == "xml") {
+		XMLOutput xmlOutput(access_file + "-out.xml", access_file);
+		for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
+			xmlOutput << **iter;
+	}
+	else if (output == "html") {
+		HTMLOutput htmlOutput(access_file + "-out.html", access_file);
+		for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
+			htmlOutput << **iter;
+	}
+	
 	
 	// clear the structure..
 	for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
