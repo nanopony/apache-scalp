@@ -28,7 +28,6 @@
   #include <boost/smart_ptr.hpp>
   #include <boost/thread/mutex.hpp>
   #include "threadpool.hpp"
-
   using namespace boost::threadpool; 
 #endif
 
@@ -75,9 +74,13 @@ class LineProcess {
 };
 #endif
 
+static bool contains(const std::string& str, const std::string& in) {
+	return str.find(in) != std::string::npos;
+}
+
 
 void help() {
-	cout << "Scalp the apache log! - http://rgaucher.info/beta/scalp" << endl;
+	cout << "Scalp the apache log! - http://rgaucher.info" << endl;
 	cout << "usage:  ./scalp.py [--log|-l log_file] [--filters|-f filter_file] [--period time-frame] [OPTIONS] [--attack a1,a2,..,an]" << endl;
 	cout << "   --log       |-l:  the apache log file './access_log' by default" << endl;
 	cout << "   --filters   |-f:  the filter file     './default_filter.xml' by default" << endl;
@@ -96,7 +99,10 @@ void help() {
 	//cout << "                     list: xss, sqli, csrf, dos, dt, spam, id, ref, lfi" << endl;
 	//cout << "                     the list of attacks should not contains spaces and comma separated" << endl;
 	//cout << "                     ex: xss,sqli,lfi,ref" << endl;
-	cout << "   --order     |-o:  set an order to the output: impact,regxp" << endl;
+	cout << "   --order     |-o:  sort the output by: impact,regexp or attack" << endl;
+	cout << "                       ex: --order impact" << endl;
+	cout << "                       to sort by impact (higher first)" << endl;
+	cout << "   --reverse   |-r:  reverse the order for the output (needs --order set)" << endl;
 }
 
 
@@ -109,24 +115,25 @@ int main(int argc, char *argv[])
 	//
 	string filter_xml  = "default_filter.xml";
 	string access_file = "access_log";
-	string output      = "html";
+	string output      = "";
+	string period      = "";
+	string order       = "";
+	bool   reverse     = false;
 
 	for(int i=1; i<argc; i++) {
 		string s = argv[i];
 		if ((s == "--log" || s == "-l") && i < argc-1)
 			access_file = argv[i+1];
-		if ((s == "--filters" || s == "-f") && i < argc-1)
+		else if ((s == "--filters" || s == "-f") && i < argc-1)
 			filter_xml = argv[i+1];
-
-		
-		
-		
-		if (s == "--html") output = "html";
-		if (s == "--text") output = "text";
-		if (s == "--xml")  output = "xml";
+		else if ((s == "--period" || s == "-p") && i < argc-1)
+			period = argv[i+1];
+		else if (s == "--html") output += "html,";
+		else if (s == "--text") output += "text,";
+		else if (s == "--xml")  output += "xml,";
 	}
-	cout << output << endl;
-	
+	if (output.empty())
+		output = "text"; // default text output
 	
 	factory.load(filter_xml);
 	if (factory.fails()) {
@@ -134,7 +141,7 @@ int main(int argc, char *argv[])
 		return 0;	
 	}	
 
-	size_t loc=0, nb_lines=100000;
+	size_t loc=0, nb_lines;
 	clock_t start=0, end=0;
 	string line;
 	vector<Match *> results;
@@ -180,6 +187,11 @@ int main(int argc, char *argv[])
 	cout << loc << " lines analyzed in " << n << " seconds" << endl;
 	cout << results.size() << " possible warnings found" << endl;
 
+	if (!order.empty()) {
+		// sort the results table...
+		
+	}
+
 	if (output == "xml") {
 		XMLOutput xmlOutput(access_file + "-out.xml", access_file);
 		for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
@@ -189,6 +201,11 @@ int main(int argc, char *argv[])
 		HTMLOutput htmlOutput(access_file + "-out.html", access_file);
 		for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
 			htmlOutput << **iter;
+	}
+	else if (output == "text") {
+		Output textOutput(access_file + "-out.txt", access_file);
+		for(vector<Match *>::iterator iter=results.begin(); iter!=results.end();++iter)
+			textOutput << **iter;
 	}
 	
 	
