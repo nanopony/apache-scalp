@@ -21,8 +21,29 @@ import json
 import re
 from datetime import datetime
 
+class PermaJail:
+    def __init__(self):
+        try:
+            with open('./jail.json') as rf:
+                self.jail = set(json.load(rf))
+        except:
+            self.jail = set()
+
+    def save(self):
+        with open('./jail.json', 'w') as rf:
+            json.dump(list(self.jail), rf)
+
 
 class AbstractSignatureBase:
+    SAFE = -1
+    DONT_KNOW = 0
+
+    def add_signature(self, signature, sev):
+        pass;
+
+    def save(self):
+        pass;
+
     def analyse(self, ip, method, url, agent):
         """
         Gets request, returns heuristic level 0 - code blue, 10 - code red
@@ -30,10 +51,10 @@ class AbstractSignatureBase:
         :param agent:
         :return:
         """
-        return 0
+        return self.DONT_KNOW
 
 
-class JsonSignatureBase:
+class JsonSignatureBase(AbstractSignatureBase):
     def __init__(self):
         with open('./signature.json') as rf:
             raw = rf.read()
@@ -42,11 +63,28 @@ class JsonSignatureBase:
 
     def _compile_signatures(self):
         self._signatures = []
+        self._false_positives = []
+
         for s in self._json['signatures']:
-            self._signatures.append((
-                re.compile(s['q'],re.I),
-                int(s['s']),
+            try:
+                self._signatures.append((
+                    re.compile(s['q'], re.I),
+                    int(s['s']),
+                ))
+            except:
+                print('%s rule is broken :c, skipping'%s['q'])
+        for s in self._json['false_positives']:
+            self._false_positives.append((
+                re.compile(s, re.I),
             ))
+
+    def add_signature(self, signature, sev=10):
+        self._json['signatures'].append({'q': signature, 's': sev, 'tags': ['scan']})
+
+    def save(self):
+        with open('./signature_2.json','w') as rf:
+            json.dump(self._json, rf)
+
     def analyse(self, ip, method, url, agent):
         """
         Gets request, returns heuristic level 0 - code blue, 10 - code red
@@ -54,23 +92,31 @@ class JsonSignatureBase:
         :param agent:
         :return:
         """
+        for s in self._false_positives:
+            if s[0].search(url):
+                return self.SAFE
+
         for s in self._signatures:
             if s[0].search(url):
                 return s[1]
-        return 0
+
+        return self.DONT_KNOW
+
 
 class Violator:
     def __init__(self, ip):
         self.ip = ip
         self.violations = []
         self.should_be_banned = False
+
     def pretty_print(self):
         print('Violator: %s %s' % (self.ip, '[BUSTED]' if self.should_be_banned else ''))
         print('Crimes:')
 
         for v in self.violations:
-            print('  %s %s %s : %s'%v)
+            print('  %s %s %s : %s' % v)
         print('')
+
     def push_violation(self, date, method, url, agent, severity):
         """
             Violator isn't in jail
@@ -107,7 +153,7 @@ class Anathema:
         self.heuristic = JsonSignatureBase()
 
         self.purgitory = dict()
-        self.jail = set()
+        self.jail = PermaJail()
 
     def parse_log(self):
         with open(self.filename) as log_file:
@@ -115,20 +161,56 @@ class Anathema:
                 m = self.log_line_regex.match(line)
                 if m is not None:
                     ip, name, date, method, url, response, byte, _, referrer, agent = m.groups()
-                    if ip in self.jail:
+                    if ip in self.jail.jail:
+                        if (ip not in self.purgitory):
+                            self.purgitory[ip] = Violator(ip)
                         self.purgitory[ip].push_evidence(date, method, url, agent)
                         continue
 
                     if len(url) > 1 and method in ('GET', 'POST', 'HEAD', 'PUT', 'PUSH', 'OPTIONS'):
                         date = datetime.strptime(date, '%d/%b/%Y:%H:%M:%S %z')
                         sev = self.heuristic.analyse(ip, method, url, agent)
-                        if (sev>0):
+                        if (sev != self.heuristic.DONT_KNOW and sev != self.heuristic.SAFE):
                             if (ip not in self.purgitory):
                                 self.purgitory[ip] = Violator(ip)
                             if self.purgitory[ip].push_violation(date, method, url, agent, sev):
-                                self.jail.add(ip)
+                                self.jail.jail.add(ip)
         for key, violator in self.purgitory.items():
             violator.pretty_print()
+
+        self.jail.save()
+
+
+    def learn(self, yes_to_all = False):
+        """
+        Function to update signature base
+        :return:
+        """
+        print('Search for all violator activities which was not detected \n\n')
+        new_signatures = set()
+
+        with open(self.filename) as log_file:
+            for line_id, line in enumerate(log_file):
+                m = self.log_line_regex.match(line)
+                if m is not None:
+                    ip, name, date, method, url, response, byte, _, referrer, agent = m.groups()
+                    if ip in self.jail.jail:
+                        sev = self.heuristic.analyse(ip, method, url, agent)
+                        if (sev == self.heuristic.DONT_KNOW and url not in new_signatures):
+                            new_signatures.add(url)
+                            if yes_to_all:
+                                self.heuristic.add_signature(url, 10)
+                            else:
+                                q = input('New signature: %s; Add? [y]/n/q: ' % url)
+                                if q in ['y','','Y']:
+                                    print('Ok')
+                                    self.heuristic.add_signature(url, 10)
+                                if q in ['q','Q']:
+                                    self.heuristic.save()
+                                    return
+        self.heuristic.save()
+
 if __name__ == '__main__':
     a = Anathema('../../test/satellite-access.log')
     a.parse_log()
+    a.learn()

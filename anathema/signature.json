@@ -1,40 +1,756 @@
 {
-  "version": 0.001,
+  "false_positives": ["^/$"],
   "signatures": [
     {
-      "q": "tmUnblock.cgi",
+      "tags": ["scan"],
       "s": 10,
-      "tags": ["scan"]
+      "q": "tmUnblock.cgi"
     },
     {
-      "q": "w00tw00t.cgi",
+      "tags": ["scan"],
       "s": 10,
-      "tags": ["scan"]
+      "q": "w00tw00t.cgi"
     },
     {
-      "q": "myadmin/scripts/setup.php",
+      "tags": ["scan"],
       "s": 10,
-      "tags": ["scan"]
+      "q": "myadmin/scripts/setup.php"
     },
     {
-      "q": "pma/scripts/setup.php",
+      "tags": ["scan"],
       "s": 10,
-      "tags": ["scan"]
+      "q": "pma/scripts/setup.php"
     },
     {
-      "q": "phpmyadmin/scripts/setup.php",
+      "tags": ["scan"],
       "s": 10,
-      "tags": ["scan"]
+      "q": "phpmyadmin/scripts/setup.php"
     },
     {
-      "q": "cgi-sys/defaultwebpage.cgi",
+      "tags": ["scan"],
       "s": 10,
-      "tags": ["scan"]
+      "q": "cgi-sys/defaultwebpage.cgi"
     },
     {
-      "q": "bigdump/bigdump.php",
+      "tags": ["scan"],
       "s": 10,
-      "tags": ["scan"]
+      "q": "bigdump/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/_ee/_fslib/swfupload/Changelog.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sqlite/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/auth/hybridauth/install.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/hybridauth/install.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/hybridauth/hybridauth/install.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/dump/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/dump/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/backup/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/mysql/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/db/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/database/bigdump.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/media/editors/tinymce/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/scripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/app/webroot/js/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/data/scripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/scripts/tinymce/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/mod/tinymce/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/tinymce/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/tinymce/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/assets/plugins/tinymce/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/includes/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sites/all/libraries/tinymce/jscripts/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/media/js/tiny_mce/plugins/tinybrowser/readme.txt"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/jscripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/scripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/app/webroot/js/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/tinymce/jscripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/fckeditor/editor/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/zenphoto/zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/tinymce/jscripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/photogallery/zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/photo/zp-core/plugins/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/public/cms/resources/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/assets/plugins/tinymce/jscripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/includes/jscripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sites/all/libraries/tinymce/jscripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/media/js/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/plugins/editors/tinymce/jscripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/assets/plugins/tinymce212/jscripts/tiny_mce/plugins/ajaxfilemanager/jscripts/for_tinymce.js"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/apps/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/scripts/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/scripts/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/js/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/includes/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/includes/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/upload/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/media/filebrowser/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/uploader/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/uploader/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/js/uploader/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/static/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/includes/js/plugins/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/core/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/inc/js/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/images/uploader/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/filebrowser/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/assets/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/public/js/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/media/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/jquery/plugins/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/jquery/uploadify/uploadify.css"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/FCKeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/lib/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/include/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sites/all/modules/fckeditor/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/editor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/fck/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/modules/fckeditor/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/editor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/public/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/app/webroot/js/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/FCKeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/cms/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/js/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/manage/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/system/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/plugins/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/webadmin/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/manager/fckeditor/editor/filemanager/connectors/uploadtest.html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/piwik/libs/open-flash-chart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sites/all/modules/civicrm/packages/OpenFlashChart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/js/ofc2/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/ofc/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/openemr/library/openflashchart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sites/default/modules/civicrm/packages/OpenFlashChart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/includes/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/openflashchart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/stats/libs/open-flash-chart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/modules/civicrm/packages/OpenFlashChart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/openemr-4.1.1/library/openflashchart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/civicrm/packages/OpenFlashChart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/libs/open-flash-chart/php-ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin_area/charts/ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/ofc-library/ofc_upload_image.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/muieblackcat"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/jenkins/script"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/hudson/script"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/jenkins/login"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/hudson/login"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/jmx-console"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/manager/html"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/msd"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/mySqlDumper"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/msd1.24stable"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/msd1.24.4"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/mysqldumper"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/MySQLDumper"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/mysql"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sql"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/phpmyadmin"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/phpMyAdmin"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/myadmin"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/phpMyAdmin-4.2.1-all-languages"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/phpMyAdmin-4.2.1-english"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/SQLite/SQLiteManager-1.2.4/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/SQLiteManager-1.2.4/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sqlitemanager/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/SQLiteManager/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/w00tw00t"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/phpmyadmin/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/phpMyAdmin/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/PhpMyAdmin/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/myadmin/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/admin/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/sql/main.php"
+    },
+    {
+      "tags": ["scan"],
+      "s": 10,
+      "q": "/mysql/main.php"
     }
-  ]
+  ],
+  "version": 0.001
 }
