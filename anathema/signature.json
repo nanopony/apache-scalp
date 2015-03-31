@@ -1,0 +1,40 @@
+{
+  "version": 0.001,
+  "signatures": [
+    {
+      "q": "tmUnblock.cgi",
+      "s": 10,
+      "tags": ["scan"]
+    },
+    {
+      "q": "w00tw00t.cgi",
+      "s": 10,
+      "tags": ["scan"]
+    },
+    {
+      "q": "myadmin/scripts/setup.php",
+      "s": 10,
+      "tags": ["scan"]
+    },
+    {
+      "q": "pma/scripts/setup.php",
+      "s": 10,
+      "tags": ["scan"]
+    },
+    {
+      "q": "phpmyadmin/scripts/setup.php",
+      "s": 10,
+      "tags": ["scan"]
+    },
+    {
+      "q": "cgi-sys/defaultwebpage.cgi",
+      "s": 10,
+      "tags": ["scan"]
+    },
+    {
+      "q": "bigdump/bigdump.php",
+      "s": 10,
+      "tags": ["scan"]
+    }
+  ]
+}
