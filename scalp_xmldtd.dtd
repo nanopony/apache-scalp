@@ -1,0 +1,12 @@
+<!ELEMENT scalp (attack*)>
+<!ATTLIST scalp         file    CDATA   #REQUIRED
+                        time    CDATA   #REQUIRED>
+<!ELEMENT attack (impact*)>
+<!ATTLIST attack        type    CDATA   #REQUIRED
+                        name    CDATA   #IMPLIED>
+<!ELEMENT impact (item+)>
+<!ATTLIST impact        value   CDATA   #REQUIRED>
+<!ELEMENT item (reason, regexp, line)>
+<!ELEMENT reason (#PCDATA )>
+<!ELEMENT regexp (#PCDATA )>
+<!ELEMENT line (#PCDATA )>

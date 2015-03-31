@@ -1,0 +1,137 @@
+<html><head><style>
+html, body {background-color:#ccc;color:#222;font-family:'Lucida Grande',Verdana,Arial,Sans-Serif;font-size:0.8em;line-height:1.6em;margin:0;padding:0;}
+body {background-color:#fff;padding:0; margin: 15px; border: 1px solid #444;}
+h1 {	display: block;	border-bottom: 2px solid #333;	padding: 5px;}
+h2 { display: block; font-size: 1.5em; font-weight: 700; background-color: #efefef;margin:10px;padding-left: 15px;}
+.match { display: block; margin: 10px; border: 1px solid; padding: 5px;}
+.impact { float: right; background-color: #fff; border: 1px solid #ccc; padding: 5px; font-size: 1.8em;}
+.impact-1,.impact-2,.impact-3 { background-color: #f2ffe0; border-color: #DEF0C3;}
+.impact-4,.impact-5 { background-color: #ffe6bf; border-color: #ffd38f;}
+.impact-6,.impact-7,.impact-8,.impact-9,.impact-10,.impact-11 /*...*/ { background-color: #FFEDEF; border-color: #FFC2CA;}
+.block {display:block; margin:5px;}
+.highlight {margin: 5px;}
+.reason {font-weight: 700; color: #444;}
+.line, .regexp {border-bottom: 1px solid #ccc; border-right: 1px solid #ccc; background-color: #fff; padding: 2px; margin: 10px;}
+#footer {text-align: center;}
+</style></head><body><h1>Scalp of almost-rgaucher.info-Aug-2008.log [Tue-16-Sep-2008]</h1>
+  <h2>xss (Cross-Site Scripting)</h2>
+<div class='match impact-4'>
+ <div class='impact'>Impact 4</div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://yaisb.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://blog.ianbicking.org/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://www.cigital.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://www.hackosis.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://jeremy.zawodny.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://www.modsecurity.org/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://googleonlinesecurity.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://jeremiahgrossman.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://kuza55.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://myappsecurity.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects JavaScript language constructs</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://myappsecurity.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>([^*:\s\w,.\/?+-]\s*)?(?&lt;![a-z]\s)(?&lt;![a-z\/_@&gt;-])(\s*return\s*)?(?:globalstorage|sessionstorage|postmessage|callee|constructor|content|domain|prototype|try|catch|top|call|apply|url|function|object|array|string|math|if|elseif|case|switch|regex|boolean|location|settimeout|setinterval|void|setexpression|namespace)(?(1)[^\w%&quot;]|(?:\s*[^@\s\w%&quot;,.+-]))</span>
+ </div>
+</div>
+<br />
+  <h2>rfe (Remote File Execution)</h2>
+<div class='match impact-5'>
+ <div class='impact'>Impact 5</div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://yaisb.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://blog.ianbicking.org/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://www.cigital.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://www.hackosis.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://jeremy.zawodny.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://www.modsecurity.org/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://googleonlinesecurity.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://jeremiahgrossman.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://kuza55.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://myappsecurity.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+ <div class='block highlight'>
+  Reason: <span class='reason'>Detects url injections and RFE attempts</span><br />
+  <span class='line'><b>Log line:</b> /romain/include-favicon.php?url=http://myappsecurity.blogspot.com/favicon.ico</span><br />
+  <span class='regexp'><b>Matching Regexp:</b>(?:\w+]?(?&lt;!href)(?&lt;!src)(?&lt;!longdesc)(?&lt;!returnurl)=(?:https?|ftp):)|(?:\{\s*\$\s*\{)</span>
+ </div>
+</div>
+<br />
+<div id='footer'>Scalp by Romain Gaucher &lt;r@rgaucher.info&gt; - <a href='http://rgaucher.info'>http://rgaucher.info</a></div></body></html>
