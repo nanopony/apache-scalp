@@ -1,11 +1,13 @@
-Scalp! is a log analyzer for the Apache web server that aims to look for security problems. The main idea is to look through huge log files and extract the possible attacks that have been sent through HTTP/GET (By default, Apache does not log the HTTP/POST variable).
+This is a fork (or rather saving the code before GoogleCode collapses) of the original project originally hosted at GoogleCode (one of thousand, I feel); 
 
-It is a code migration from GoogleCode (one of thousand, I feel); I will definitely look forward to developing some additional heuristics 
+Scalp! is a log analyzer for the Apache web server that aims to look for security problems developed by Romain Gaucher. The main idea is to look through huge log files and extract the possible attacks that have been sent through HTTP/GET (By default, Apache does not log the HTTP/POST variable).
+
+default_filters.xml is a part of PHP IDS project;
 
 ## How it works
 Scalp is basically using the regular expression from the PHP-IDS project and matches the lines from the Apache access log file. These regexp has been chosen because of their quality and the top activity of the team maintaining that project.
 
-You will then need this file https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.xml in order to run Scalp.
+You will then need latest version of this file https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.xml in order to run Scalp. 
 
 Scalp started as a simple python script which is still maintained, but I plan to focus my effort on the binary version (written in C++) for efficiency when it comes to scalp huge log files.
 
