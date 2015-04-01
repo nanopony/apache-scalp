@@ -7,7 +7,7 @@ default_filters.xml is a part of PHP IDS project;
 ## How it works
 Scalp is basically using the regular expression from the PHP-IDS project and matches the lines from the Apache access log file. These regexp has been chosen because of their quality and the top activity of the team maintaining that project.
 
-You will then need latest version of this file https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.xml in order to run Scalp. 
+You will then need latest version of this file https://dev.itratos.de/projects/php-ids/repository/raw/trunk/lib/IDS/default_filter.xml in order to run Scalp. (actually, Scalp! can even download it for you :3 )
 
 Scalp started as a simple python script which is still maintained, but I plan to focus my effort on the binary version (written in C++) for efficiency when it comes to scalp huge log files.
 
