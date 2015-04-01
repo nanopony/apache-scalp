@@ -18,8 +18,10 @@
     limitations under the License.
 """
 import json
+import os
 import re
-from datetime import datetime
+from datetime import datetime, time
+
 
 class PermaJail:
     def __init__(self):
@@ -72,7 +74,7 @@ class JsonSignatureBase(AbstractSignatureBase):
                     int(s['s']),
                 ))
             except:
-                print('%s rule is broken :c, skipping'%s['q'])
+                print('%s rule is broken :c, skipping' % s['q'])
         for s in self._json['false_positives']:
             self._false_positives.append((
                 re.compile(s, re.I),
@@ -82,7 +84,7 @@ class JsonSignatureBase(AbstractSignatureBase):
         self._json['signatures'].append({'q': signature, 's': sev, 'tags': ['scan']})
 
     def save(self):
-        with open('./signature_2.json','w') as rf:
+        with open('./signature_2.json', 'w') as rf:
             json.dump(self._json, rf)
 
     def analyse(self, ip, method, url, agent):
@@ -128,6 +130,7 @@ class Violator:
         :return:
         """
         self.latest_violation = date
+        print('# %s %s %s' % (method, url, agent))
         self.violations.append((method, url, agent, severity))
         self.should_be_banned = True
         return self.should_be_banned
@@ -142,6 +145,7 @@ class Violator:
         :param severity:
         :return:
         """
+        print('. %s %s %s' % (method, url, agent))
         self.violations.append((method, url, agent, 10))
 
 
@@ -150,6 +154,10 @@ class Anathema:
         self.filename = filename
         self.log_line_regex = re.compile(
             r'^([0-9\.]+)\s(.*)\[(.*)\]\s"([A-Z]+)\s*(.+)\sHTTP/\d.\d"\s(\d+)\s([\d]+)(\s"(.+)" )?(.*)$')
+        self.malicious_malformed_line_regex = re.compile(
+            r'^([0-9\.]+)\s(.*)\[(.*)\]\s"(.*)(\\x\d+)+(.*)"\s(\d+)\s([\d]+)(\s"(.+)" )?(.*)$')
+        self.malformed_line_regex = re.compile(
+            r'^([0-9\.]+)\s(.*)\[(.*)\]\s"(.+)"\s(\d+)\s([\d]+)(\s"(.+)" )?(.*)$')
         self.heuristic = JsonSignatureBase()
 
         self.purgitory = dict()
@@ -161,6 +169,7 @@ class Anathema:
                 m = self.log_line_regex.match(line)
                 if m is not None:
                     ip, name, date, method, url, response, byte, _, referrer, agent = m.groups()
+
                     if ip in self.jail.jail:
                         if (ip not in self.purgitory):
                             self.purgitory[ip] = Violator(ip)
@@ -175,17 +184,31 @@ class Anathema:
                                 self.purgitory[ip] = Violator(ip)
                             if self.purgitory[ip].push_violation(date, method, url, agent, sev):
                                 self.jail.jail.add(ip)
+                else:
+                    m2 = self.malformed_line_regex.match(line)
+
+                    if (m2 and self.malicious_malformed_line_regex.match(line)):
+                        ip, name, date, url, response, byte, _, referrer, agent = m2.groups()
+                        date = datetime.strptime(date, '%d/%b/%Y:%H:%M:%S %z')
+                        if (ip not in self.purgitory):
+                            self.purgitory[ip] = Violator(ip)
+                        if self.purgitory[ip].push_violation(date, method, url, agent, 10):
+                            self.jail.jail.add(ip)
+                    else:
+                        print('Bad line: %s' % line)
         for key, violator in self.purgitory.items():
             violator.pretty_print()
 
         self.jail.save()
 
 
-    def learn(self, yes_to_all = False):
+    def learn(self, yes_to_all=False, dump_only=True):
         """
         Function to update signature base
         :return:
         """
+        if len(self.jail.jail) == 0:
+            return;
         print('Search for all violator activities which was not detected \n\n')
         new_signatures = set()
 
@@ -198,19 +221,28 @@ class Anathema:
                         sev = self.heuristic.analyse(ip, method, url, agent)
                         if (sev == self.heuristic.DONT_KNOW and url not in new_signatures):
                             new_signatures.add(url)
+
                             if yes_to_all:
                                 self.heuristic.add_signature(url, 10)
-                            else:
+                            elif not dump_only:
                                 q = input('New signature: %s; Add? [y]/n/q: ' % url)
-                                if q in ['y','','Y']:
+                                if q in ['y', '', 'Y']:
                                     print('Ok')
                                     self.heuristic.add_signature(url, 10)
-                                if q in ['q','Q']:
+                                if q in ['q', 'Q']:
                                     self.heuristic.save()
                                     return
-        self.heuristic.save()
+        if dump_only:
+            PATH = './new_vectors'
+            os.makedirs(PATH, exist_ok=True)
+            curtime = datetime.now().strftime("%a-%d-%b-%Y")
+            with open(os.path.join(PATH, 'new_vectors_%s_%s.txt'%(os.path.splitext(os.path.basename(self.filename))[0], curtime)),'w') as rp:
+                rp.writelines([ l+'\n' for l in new_signatures])
+        else:
+            self.heuristic.save()
+
 
 if __name__ == '__main__':
-    a = Anathema('../../test/satellite-access.log')
+    a = Anathema('../../test/a_6.log')
     a.parse_log()
     a.learn()
